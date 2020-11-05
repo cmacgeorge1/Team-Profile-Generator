@@ -117,7 +117,63 @@ function createManager() {
 
 
 // Create Engineer
+function createEngineer () {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "engineerName",
+            message: "What is your first and last name?",
+            validate: answer => {
+                if (answer !== " ") {
+                    return true
+                }
+                return "Please enter Engineer's name"
+            }
+        },
+        {
+            type: "input",
+            name: "engineerId",
+            message: "What is your company ID?",
+            validate: answer => {
+                const pass = answer.match(
+                    /^[1-9]\d*$/
+                )
+                if (pass) {
+                    if(idArray.includes(answer)) {
+                        return "This ID number is not valid"
+                    } else {
+                        return true
+                    }
+                }
+            }
+        },
+        {
+            type: "input",
+            name: "egineerEmail",
+            message: "What is your company Email?",
+            validate: answer => {
+                const pass = answer.match(
+                    /\S+@\S+\.\S+/
+                )
+                if (pass) {
+                    return true
+                }
+                return "Please enter a valid email address"
+            }
+        },
+        {
+            type: "input",
+            name: "engineerGithub",
+            message: "What is your github username?"
+        }
+    ]).then(answers => {
+        const engineer = new Engineer (answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub)
+        allEmployees.push(engineer)
+        idArray.push(answers.engineerId)
 
+        generateEmployee();
+    })
+};
 
 // Create Intern
 
