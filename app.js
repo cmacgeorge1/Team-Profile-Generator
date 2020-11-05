@@ -107,7 +107,7 @@ function createManager() {
             }
         }
     ]).then(answers => {
-        const manager = new Manager (answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNumber)
+        const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNumber)
         allEmployees.push(manager)
         idArray.push(answers.managerId)
 
@@ -117,7 +117,7 @@ function createManager() {
 
 
 // Create Engineer
-function createEngineer () {
+function createEngineer() {
     inquirer.prompt([
         {
             type: "input",
@@ -139,7 +139,7 @@ function createEngineer () {
                     /^[1-9]\d*$/
                 )
                 if (pass) {
-                    if(idArray.includes(answer)) {
+                    if (idArray.includes(answer)) {
                         return "This ID number is not valid"
                     } else {
                         return true
@@ -167,7 +167,7 @@ function createEngineer () {
             message: "What is your github username?"
         }
     ]).then(answers => {
-        const engineer = new Engineer (answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub)
+        const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub)
         allEmployees.push(engineer)
         idArray.push(answers.engineerId)
 
@@ -176,27 +176,68 @@ function createEngineer () {
 };
 
 // Create Intern
+function createIntern() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "internName",
+            message: "What is your first and last name?",
+            validate: answer => {
+                if (answer !== " ") {
+                    return true
+                }
+                return "Please enter Intern's name"
+            }
+        },
+        {
+            type: "input",
+            name: "internId",
+            message: "What is your company ID?",
+            validate: answer => {
+                const pass = answer.match(
+                    /^[1-9]\d*$/
+                )
+                if (pass) {
+                    if (idArray.includes(answer)) {
+                        return "This ID number is not valid"
+                    } else {
+                        return true
+                    }
+                }
+            }
+        },
+        {
+            type: "input",
+            name: "internEmail",
+            message: "What is your company Email?",
+            validate: answer => {
+                const pass = answer.match(
+                    /\S+@\S+\.\S+/
+                )
+                if (pass) {
+                    return true
+                }
+                return "Please enter a valid email address."
+            }
+        },
+        {
+            type: "input",
+            name: "internSchool",
+            message: "What school doyou attend?",
+        }
+    ]).then(answers => {
+        const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool)
+        allEmployees.push(intern)
+        idArray.push(answers.internId)
 
-
+        generateEmployee();
+    })
+};
 
 // Render to HTML
-
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
+function buildTeam() {
+    if (!fs.existsSync(OUTPUT_DIR)) {
+        fs.mkdirSync(OUTPUT_DIR)
+    }
+    fs.writeFileSync(outputPath, render(allEmployees, "utf-8"))
+};
