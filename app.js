@@ -27,12 +27,12 @@ function generateEmployee() {
             name: "role",
             message: "What is your company title?",
             choices: ["Manager", "Engineer", "Intern", "Quit"]
-        }).then(function ({ role }) {
+        }).then(function({ role }){
             switch (role) {
                 case "Manager":
                     createManager();
                     break;
-
+                
                 case "Engineer":
                     createEngineer();
                     break;
@@ -44,25 +44,25 @@ function generateEmployee() {
                 default:
                     buildTeam();
             }
-        });
+        });   
 };
 
 // Create Manager
-function createManager() {
+function createManager() { 
     inquirer.prompt([
         {
-            type: "input",
+            type: "input", 
             name: "managerName",
-            message: "What is your first and last name?",
+            message: "What is your First and Last name?",
             validate: answer => {
-                if (answer !== "") {
-                    return true
-                }
-                return "Please enter Manager name"
+                if (answer !== " ") {
+                    return true 
+                } 
+                return "Please enter Manager's name"
             }
         },
         {
-            type: "input",
+            type: "input", 
             name: "managerId",
             message: "What is your company ID?",
             validate: answer => {
@@ -70,7 +70,7 @@ function createManager() {
                     /^[1-9]\d*$/
                 )
                 if (pass) {
-                    if (idArray.includes(answer)) {
+                    if(idArray.includes(answer)) {
                         return "This ID number is not valid"
                     } else {
                         return true
@@ -79,7 +79,7 @@ function createManager() {
             }
         },
         {
-            type: "input",
+            type: "input", 
             name: "managerEmail",
             message: "What is your company Email?",
             validate: answer => {
@@ -88,12 +88,12 @@ function createManager() {
                 )
                 if (pass) {
                     return true
-                }
-                return "Please enter a valid email address"
+                } 
+                return "Please enter a valid email address."
             }
         },
         {
-            type: "input",
+            type: "input", 
             name: "managerOfficeNumber",
             message: "What is your company Office Number?",
             validate: answer => {
@@ -102,12 +102,12 @@ function createManager() {
                 )
                 if (pass) {
                     return true
-                }
-                return "Please enter a valid office number"
+                } 
+                return "Please enter a valid office number."
             }
         }
     ]).then(answers => {
-        const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNumber)
+        const manager = new Manager (answers.managerName,answers.managerId, answers.managerEmail, answers.managerOfficeNumber)
         allEmployees.push(manager)
         idArray.push(answers.managerId)
 
@@ -239,5 +239,5 @@ function buildTeam() {
     if (!fs.existsSync(OUTPUT_DIR)) {
         fs.mkdirSync(OUTPUT_DIR)
     }
-    fs.writeFileSync(outputPath, render(allEmployees, "utf-8"))
+    fs.writeFileSync(outputPath, render(allEmployees), "utf-8");  
 };
